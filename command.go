@@ -27,7 +27,7 @@ func MakeBroadcastCmd(arg byte, command Command) []byte {
 // CmdRemoveGroup
 // CmdScene
 func MakeLampCmd(arg byte, dest byte, command Command) []byte {
-	return makeCommonCmd(arg, dest, 0x1, command)
+	return makeCommonCmd(arg, dest, 0x3f, 0x1, command)
 }
 
 // MakeGroupCmd creates a command to be sent to the group given by dest
@@ -39,7 +39,7 @@ func MakeLampCmd(arg byte, dest byte, command Command) []byte {
 // CmdRemoveGroup
 // CmdScene
 func MakeGroupCmd(arg byte, dest byte, command Command) []byte {
-	return makeCommonCmd(arg, dest, 0xf, command)
+	return makeCommonCmd(arg, dest, 0xf, 0x81, command)
 }
 
 // MakeSpecialCommand creates a special command
@@ -105,8 +105,8 @@ func MakeSpecialCommand(cmd byte, dest Destination) []byte {
 }
 
 // makeCommonCmd creates the complete command including address and version
-func makeCommonCmd(arg, dest, and byte, command Command) []byte {
-	address := makeAddress(dest, and)
+func makeCommonCmd(arg, dest, and, first byte, command Command) []byte {
+	address := makeAddress(dest, and, first)
 	return append(
 		[]byte{
 			daliVersion,
@@ -117,8 +117,8 @@ func makeCommonCmd(arg, dest, and byte, command Command) []byte {
 }
 
 // makeAddress creates an address
-func makeAddress(dest, and byte) byte {
-	return 0x1 | ((dest & and) << 1)
+func makeAddress(dest, and, first byte) byte {
+	return first | ((dest & and) << 1)
 }
 
 // makeCommand creates the requested command
