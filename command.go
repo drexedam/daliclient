@@ -144,7 +144,7 @@ func makeCommand(arg byte, address byte, command Command) []byte {
 	case CmdUp:
 		code = 0x08
 	case CmdSetScene:
-		code = 0x10 | (arg | 0xf)
+		code = 0x10 | (arg & 0xf)
 	case CmdReset:
 		code = 0x20
 	case CmdStoreDtr:
